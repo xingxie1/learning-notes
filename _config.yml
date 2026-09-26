@@ -36,9 +36,12 @@ external_link:
   exclude: []
 filename_case: 1
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true
 relative_link: false
 future: false
+marked:
+  prependRoot: true
+  postAsset: true
 syntax_highlighter: highlight.js
 highlight:
   auto_detect: false

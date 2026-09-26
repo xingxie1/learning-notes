@@ -1,0 +1,23 @@
+{
+  "markdown.copyFiles.destination": {
+    "/source/_posts/**/*.md": "${documentBaseName}/"
+  },
+  "markdown.copyFiles.overwriteBehavior": "nameIncrementally",
+  "markdown.extension.math.enabled": false,
+  "markdown.extension.preview.autoShowPreviewToSide": false,
+  "markdown-preview-enhanced.mathRenderingOption": "KaTeX",
+  "markdown-preview-enhanced.frontMatterRenderingOption": "none",
+  "[markdown]": {
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": {
+      "other": "on",
+      "comments": "off",
+      "strings": "off"
+    },
+    "editor.tabCompletion": "on",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.markdownlint": "explicit"
+    }
+  },
+  "markdownlint.run": "onSave"
+}

@@ -114,3 +114,7 @@ darkmode:
   enable: true
   button: true
   autoChangeMode: false
+
+math:
+  use: katex
+  per_page: false

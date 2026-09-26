@@ -1,0 +1,108 @@
+{
+  "Hexo 学习笔记": {
+    "scope": "markdown",
+    "prefix": "hexo-note",
+    "isFileTemplate": true,
+    "description": "创建带分类、标签和数学公式支持的学习笔记",
+    "body": [
+      "---",
+      "title: \"${1:笔记标题}\"",
+      "date: ${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE} ${CURRENT_HOUR}:${CURRENT_MINUTE}:00",
+      "categories:",
+      "  - ${2:学习笔记}",
+      "tags:",
+      "  - ${3:学习}",
+      "description: \"${4:一句话摘要}\"",
+      "katex: true",
+      "---",
+      "",
+      "## 问题",
+      "",
+      "${5:这次想弄清楚什么？}",
+      "",
+      "## 思路与实践",
+      "",
+      "${6:记录关键步骤和例子。}",
+      "",
+      "## 总结",
+      "",
+      "$0"
+    ]
+  },
+  "Hexo 算法题解": {
+    "scope": "markdown",
+    "prefix": "hexo-algo",
+    "isFileTemplate": true,
+    "description": "创建适合 CF / ICPC 的算法题解",
+    "body": [
+      "---",
+      "title: \"${1:题目名称}\"",
+      "date: ${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE} ${CURRENT_HOUR}:${CURRENT_MINUTE}:00",
+      "categories:",
+      "  - 算法题解",
+      "tags:",
+      "  - ${2:算法}",
+      "  - ${3:Codeforces}",
+      "description: \"${4:题目来源与核心思路}\"",
+      "katex: true",
+      "---",
+      "",
+      "## 题目与链接",
+      "",
+      "${5:题目链接及一句话题意。}",
+      "",
+      "## 思路",
+      "",
+      "${6:关键观察与推导。}",
+      "",
+      "## 正确性与复杂度",
+      "",
+      "时间复杂度：\\$O(${7:n})\\$。空间复杂度：\\$O(${8:n})\\$。",
+      "",
+      "## C++ 代码",
+      "",
+      "```cpp",
+      "#include <bits/stdc++.h>",
+      "using namespace std;",
+      "",
+      "int main() {",
+      "    ios::sync_with_stdio(false);",
+      "    cin.tie(nullptr);",
+      "    $0",
+      "}",
+      "```",
+      "",
+      "## 易错点",
+      ""
+    ]
+  },
+  "C++ 代码块": {
+    "scope": "markdown",
+    "prefix": "cppblock",
+    "description": "插入带语言标记的 C++ 代码块",
+    "body": [
+      "```cpp",
+      "$0",
+      "```"
+    ]
+  },
+  "行内公式": {
+    "body": [
+      "\\${1:公式}\\$"
+    ],
+    "description": "插入行内数学公式",
+    "prefix": "mathinline",
+    "scope": "markdown"
+  },
+  "独立公式块": {
+    "body": [
+      "\\$\\$",
+      "${1:a^2 + b^2 = c^2}",
+      "\\$\\$",
+      "$0"
+    ],
+    "description": "插入独立数学公式块",
+    "prefix": "mathblock",
+    "scope": "markdown"
+  }
+}
