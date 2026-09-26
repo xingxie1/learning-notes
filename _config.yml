@@ -8,8 +8,8 @@ language: zh-CN
 timezone: Asia/Shanghai
 
 # GitHub Pages 项目站点地址
-url: https://xingxie1.github.io/learning-notes
-root: /learning-notes/
+url: https://xingxie.com
+root: /
 permalink: posts/:title/
 permalink_defaults:
 pretty_urls:
@@ -70,3 +70,4 @@ search:
   field: post
   content: true
   format: html
+
