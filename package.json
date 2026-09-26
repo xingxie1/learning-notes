@@ -1,0 +1,32 @@
+{
+  "name": "learning-notes-blog",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hexo + Butterfly learning notes blog",
+  "packageManager": "pnpm@11.19.0",
+  "hexo": {
+    "version": "8.1.2"
+  },
+  "scripts": {
+    "dev": "hexo server",
+    "clean": "hexo clean",
+    "build": "hexo generate",
+    "new": "hexo new"
+  },
+  "dependencies": {
+    "hexo": "8.1.2",
+    "hexo-cli": "4.3.2",
+    "hexo-generator-archive": "2.0.0",
+    "hexo-generator-category": "2.0.0",
+    "hexo-generator-index": "4.0.0",
+    "hexo-generator-searchdb": "1.5.0",
+    "hexo-generator-tag": "2.0.0",
+    "hexo-renderer-marked": "7.0.1",
+    "hexo-renderer-pug": "3.0.0",
+    "hexo-renderer-stylus": "3.0.1",
+    "hexo-server": "3.0.0",
+    "hexo-theme-butterfly": "5.7.0",
+    "hexo-util": "4.0.0",
+    "moment-timezone": "0.6.4"
+  }
+}
