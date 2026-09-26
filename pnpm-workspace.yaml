@@ -1,2 +1,3 @@
 allowBuilds:
   hexo-util: false
+storeDir: .pnpm-store
