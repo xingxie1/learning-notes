@@ -2,8 +2,8 @@
 
 基于 Hexo 和 Butterfly 的学习笔记博客。
 
-- 博客：https://xingxie1.github.io/learning-notes/
-- 仓库：https://github.com/xingxie1/learning-notes
+- 博客：<https://xingxie1.github.io/learning-notes/>
+- 仓库：<https://github.com/xingxie1/learning-notes>
 
 ## 用 VS Code 写笔记
 
@@ -82,7 +82,7 @@ Markdown All in One 负责列表、表格和编辑快捷键，Markdown Preview E
 pnpm run dev
 ```
 
-打开 http://localhost:4000/learning-notes/ 查看 Butterfly 的实际效果。停止服务时在终端按 Ctrl+C。
+打开 <http://localhost:4000/learning-notes/> 查看 Butterfly 的实际效果。停止服务时在终端按 Ctrl+C。
 
 ### 6. 发布
 
