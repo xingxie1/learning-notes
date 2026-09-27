@@ -5,4 +5,4 @@ db.json
 .DS_Store
 Thumbs.db
 .pnpm-store/
-.tools/
+tools/runtime/

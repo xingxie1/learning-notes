@@ -22,5 +22,20 @@
       "source.fixAll.markdownlint": "explicit"
     }
   },
-  "markdownlint.run": "onSave"
+  "markdownlint.run": "onSave",
+  "files.exclude": {
+    "node_modules": true,
+    ".pnpm-store": true,
+    "public": true,
+    "db.json": true,
+    "tools/runtime": true,
+    ".github": true,
+    ".vscode": true,
+    "scaffolds": true,
+    ".gitignore": true,
+    ".markdownlint.json": true,
+    "package.json": true,
+    "pnpm-lock.yaml": true,
+    "pnpm-workspace.yaml": true
+  }
 }

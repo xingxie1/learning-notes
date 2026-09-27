@@ -28,7 +28,7 @@
 另一种方式是在终端运行：
 
 ```powershell
-pnpm run new -- "新笔记标题"
+.\tools\pnpm.cmd run new -- "新笔记标题"
 ```
 
 Hexo 会按 `scaffolds/post.md` 创建文章，自动填入标题、日期和分类，并生成同名的图片目录。
@@ -79,7 +79,7 @@ Markdown All in One 负责列表、表格和编辑快捷键，Markdown Preview E
 在终端运行：
 
 ```powershell
-pnpm run dev
+.\tools\pnpm.cmd run dev
 ```
 
 打开 <http://localhost:4000/learning-notes/> 查看 Butterfly 的实际效果。停止服务时在终端按 Ctrl+C。
@@ -105,9 +105,17 @@ GitHub Actions 会自动构建并发布，不需要上传 `public/`。仓库的 
 生成静态文件：
 
 ```powershell
-pnpm run clean
-pnpm run build
+.\tools\pnpm.cmd run clean
+.\tools\pnpm.cmd run build
 ```
+
+## 文件整理
+
+辅助命令入口统一放在 `tools/`。本机的 pnpm 程序放在 `tools/runtime/`，不提交到仓库。在项目根目录运行 `./tools/pnpm.cmd run dev` 可启动预览；换电脑后需要重新准备 pnpm 本地工具，或直接使用系统安装的 pnpm。
+
+VS Code 文件列表隐藏了依赖、缓存、生成结果和不常编辑的工程配置。这些文件仍在原处，博客构建与发布继续使用它们。需要恢复显示时，在 `.vscode/settings.json` 的 `files.exclude` 中删除对应项或改为 `false`。
+
+博客配置 `_config.yml`、主题配置 `_config.butterfly.yml` 和写作目录 `source/` 保持可见。
 
 ## 常用文件
 
