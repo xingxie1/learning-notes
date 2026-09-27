@@ -7,6 +7,8 @@ tags:
   - 其他
 description: "退役作文"
 katex: true
+cover: /img/世事一场大梦，人生几度凄凉_cover.jpg
+
 ---
 
 第一次接触 C 语言，是在高三毕业后的那个暑假。
