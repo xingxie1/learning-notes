@@ -14,7 +14,7 @@ social:
 
 favicon: /img/favicon.svg
 avatar:
-  img: /img/avatar.svg
+  img: /img/avatar.jpg
   effect: false
 
 default_top_img: /img/header.svg

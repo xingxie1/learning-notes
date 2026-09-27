@@ -1,4 +1,7 @@
 {
+  "terminal.integrated.env.windows": {
+    "PATH": "${env:ProgramFiles}\\nodejs;${env:APPDATA}\\npm;${env:PATH}"
+  },
   "markdown.copyFiles.destination": {
     "/source/_posts/**/*.md": "${documentBaseName}/"
   },
