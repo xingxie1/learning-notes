@@ -7,6 +7,7 @@ categories:
 tags:
   - 学习
 description:
+cover: /img/card-cover.svg
 katex: true
 ---
 
