@@ -117,4 +117,4 @@ darkmode:
 
 math:
   use: katex
-  per_page: false
+  per_page: true
