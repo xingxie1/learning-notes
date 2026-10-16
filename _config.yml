@@ -24,7 +24,8 @@ archive_dir: archives
 category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
-skip_render: - "demos/**"
+skip_render:
+  - "demos/**"
 
 # 写作
 new_post_name: :title.md
