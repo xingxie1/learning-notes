@@ -118,3 +118,7 @@ darkmode:
 math:
   use: katex
   per_page: true
+
+inject:
+  head:
+    - <link rel="stylesheet" href="/learning-notes/css/github-alerts.css">

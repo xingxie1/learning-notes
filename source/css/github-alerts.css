@@ -1,0 +1,98 @@
+.markdown-alert {
+  --alert-accent: #0969da;
+  --alert-background: #ddf4ff;
+  --alert-border: #54aeff;
+  margin: 1.2em 0;
+  padding: 0.9rem 1rem 0.8rem;
+  border: 1px solid var(--alert-border);
+  border-left-width: 0.28rem;
+  border-radius: 0.7rem;
+  background: var(--alert-background);
+}
+
+.markdown-alert-title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.55rem;
+  color: var(--alert-accent);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.markdown-alert-icon::before {
+  display: inline-block;
+  width: 1.25rem;
+  font-size: 1.25rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.markdown-alert-note {
+  --alert-accent: #0969da;
+  --alert-background: #ddf4ff;
+  --alert-border: #54aeff;
+}
+
+.markdown-alert-note .markdown-alert-icon::before { content: 'ⓘ'; }
+
+.markdown-alert-tip {
+  --alert-accent: #1a7f37;
+  --alert-background: #dafbe1;
+  --alert-border: #4ac26b;
+}
+
+.markdown-alert-tip .markdown-alert-icon::before { content: '♧'; }
+
+.markdown-alert-important {
+  --alert-accent: #8250df;
+  --alert-background: #fbefff;
+  --alert-border: #c297ff;
+}
+
+.markdown-alert-important .markdown-alert-icon::before { content: '◌'; }
+
+.markdown-alert-warning {
+  --alert-accent: #9a6700;
+  --alert-background: #fff8c5;
+  --alert-border: #d4a72c;
+}
+
+.markdown-alert-warning .markdown-alert-icon::before { content: '⚠'; }
+
+.markdown-alert-caution {
+  --alert-accent: #cf222e;
+  --alert-background: #ffebe9;
+  --alert-border: #ff8182;
+}
+
+.markdown-alert-caution .markdown-alert-icon::before { content: '⛔'; }
+
+.markdown-alert > :last-child { margin-bottom: 0; }
+.markdown-alert > :first-child { margin-top: 0; }
+
+html[data-theme='dark'] .markdown-alert {
+  --alert-accent: #79c0ff;
+  --alert-background: #161b22;
+  --alert-border: #388bfd;
+}
+
+html[data-theme='dark'] .markdown-alert-tip {
+  --alert-accent: #56d364;
+  --alert-border: #2ea043;
+}
+
+html[data-theme='dark'] .markdown-alert-important {
+  --alert-accent: #d2a8ff;
+  --alert-border: #8957e5;
+}
+
+html[data-theme='dark'] .markdown-alert-warning {
+  --alert-accent: #e3b341;
+  --alert-border: #bb8009;
+}
+
+html[data-theme='dark'] .markdown-alert-caution {
+  --alert-accent: #ff7b72;
+  --alert-border: #f85149;
+}
