@@ -75,12 +75,12 @@ hexo.extend.filter.register('markdown-it:renderer', function(parser) {
 
   parser.core.ruler.after('inline', 'github_alerts', transformAlerts);
 
-  parser.renderer.rules.github_alert_open = token => {
-    return `<div class="${token.attrGet('class')}">\n`;
+  parser.renderer.rules.github_alert_open = (tokens, index) => {
+    return `<div class="${tokens[index].attrGet('class')}">\n`;
   };
 
-  parser.renderer.rules.github_alert_title = token => {
-    return `<div class="markdown-alert-title"><span class="markdown-alert-icon" aria-hidden="true"></span><span>${token.meta.label}</span></div>\n`;
+  parser.renderer.rules.github_alert_title = (tokens, index) => {
+    return `<div class="markdown-alert-title"><span class="markdown-alert-icon" aria-hidden="true"></span><span>${tokens[index].meta.label}</span></div>\n`;
   };
 
   parser.renderer.rules.github_alert_close = () => '</div>\n';
