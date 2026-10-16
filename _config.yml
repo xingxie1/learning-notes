@@ -43,6 +43,11 @@ future: false
 
 markdown:
   preset: default
+  anchors:
+    level: 1
+    collisionSuffix: ''
+    case: 0
+    separator: '-'
   render:
     html: true
     breaks: true
