@@ -40,9 +40,19 @@ render_drafts: false
 post_asset_folder: true
 relative_link: false
 future: false
-marked:
-  prependRoot: true
-  postAsset: true
+
+markdown:
+  preset: default
+  render:
+    html: true
+    breaks: true
+    linkify: true
+  plugins:
+    - name: '@renbaoshuo/markdown-it-katex'
+      options:
+        skipDelimitersCheck: true
+        strict: false
+
 syntax_highlighter: highlight.js
 highlight:
   auto_detect: false
