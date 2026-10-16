@@ -2,28 +2,46 @@
 
 const path = require('path');
 
-// VS Code inserts "post-name/image.png" for its local Markdown preview.
-// Hexo expects "image.png" when resolving the same post asset for the site.
-hexo.extend.filter.register('marked:renderer', function(renderer) {
-  const renderImage = renderer.image;
+const configuredParsers = new WeakSet();
+const normalizePath = value => value.replace(/\\/g, '/');
 
-  renderer.image = function(token) {
-    const postPath = this.options.postPath;
-    const href = token.href;
+// Resolve both "image.png" and VS Code's "post-name/image.png" through Hexo.
+// Markdown-it encodes Chinese URLs, while PostAsset IDs use decoded paths.
+hexo.extend.filter.register('markdown-it:renderer', function(parser) {
+  if (configuredParsers.has(parser)) return;
+  configuredParsers.add(parser);
 
-    if (postPath && typeof href === 'string') {
-      const postName = path.posix.basename(postPath.replace(/\\/g, '/'));
-      const prefix = postName + '/';
+  const renderImage = parser.renderer.rules.image;
 
-      if (href.startsWith(prefix)) {
-        const imageName = href.slice(prefix.length);
-        const assetId = path.posix.join(postPath.replace(/\\/g, '/'), imageName);
-        const asset = this.options.hexo.model('PostAsset').findById(assetId);
+  parser.renderer.rules.image = function(tokens, index, options, env, renderer) {
+    const token = tokens[index];
+    const src = token.attrGet('src');
 
-        if (asset) token = { ...token, href: imageName };
+    if (hexo.config.post_asset_folder && hexo.config.markdown.images.post_asset &&
+        env.postPath && src && !/^(?:[a-z][a-z\d+.-]*:|[/\\#])/i.test(src)) {
+      const [, imagePath, suffix] = src.match(/^([^?#]*)(.*)$/);
+      let decodedPath;
+      try {
+        decodedPath = decodeURIComponent(imagePath);
+      } catch {
+        return renderImage.call(this, tokens, index, options, env, renderer);
       }
+
+      // Use POSIX separators consistently on Windows and on GitHub Actions.
+      const postPath = path.posix.relative(
+        normalizePath(hexo.base_dir), normalizePath(env.postPath)
+      );
+      const assetDir = postPath.slice(0, -path.posix.extname(postPath).length);
+      const PostAsset = hexo.model('PostAsset');
+      const asset = [
+        path.posix.join(assetDir, decodedPath),
+        path.posix.join(path.posix.dirname(postPath), decodedPath)
+      ].map(id => PostAsset.findById(id)).find(Boolean);
+
+      // The renderer's image rule adds the site's root and escapes the URL.
+      if (asset) token.attrSet('src', '/' + asset.path + suffix);
     }
 
-    return renderImage.call(this, token);
+    return renderImage.call(this, tokens, index, options, env, renderer);
   };
 });

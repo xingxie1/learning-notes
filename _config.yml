@@ -52,6 +52,11 @@ markdown:
       options:
         skipDelimitersCheck: true
         strict: false
+  images:
+    # 由 resolve-post-images.js 适配中文资源路径，并补上项目站点根路径。
+    lazyload: false
+    prepend_root: true
+    post_asset: true
 
 syntax_highlighter: highlight.js
 highlight:
