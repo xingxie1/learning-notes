@@ -16,13 +16,22 @@
     .cell.active { background: #e8f7ef; border-color: #8bd3aa; color: #167044; }
     .index { display: block; margin-top: 8px; color: #64748b; font-size: 17px; font-family: Georgia, serif; }
     .value { display: block; font-size: 29px; font-weight: 700; }
+    .array-title { margin: 18px 0 10px; font-size: 16px; font-weight: 600; }
+    .prefix-array { grid-template-columns: repeat(var(--prefix-count, 6), minmax(0, 1fr)); gap: 8px; }
+    .prefix-array .cell { padding: 12px 3px 10px; }
+    .prefix-array .value { font-size: 25px; }
+    .cell.subtract { background: #fff4e5; border-color: #e7b563; color: #935600; }
+    .marker { display: block; min-height: 18px; margin-top: 6px; font-size: 12px; font-weight: 600; }
+    .prefix-help { margin: 10px 0 0; color: #64748b; font-size: 14px; line-height: 1.7; }
+    .include-key { color: #167044; font-weight: 600; }
+    .subtract-key { color: #935600; font-weight: 600; }
     .controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 18px; }
     label { display: block; font-size: 17px; }
     select { width: 100%; height: 52px; margin-top: 6px; padding: 0 14px; color: #1f2937; background: #fff; border: 1px solid #cbd5e1; border-radius: 28px; font-size: 20px; cursor: pointer; }
     select:focus { outline: 2px solid #64b78a; outline-offset: 2px; }
     .result { margin-top: 32px; padding: 0 12px; }
     .result p { margin: 0 0 15px; font-size: 16px; }
-    .formula-line { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .formula-line { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
     .formula { font-size: 23px; font-family: Georgia, "Times New Roman", serif; }
     .answer { font-size: 30px; color: #28ca74; font-weight: 700; }
     .direct { margin-top: 14px; font-size: 16px; font-family: Georgia, "Microsoft YaHei", serif; }
@@ -34,6 +43,9 @@
       .cell { padding: 12px 3px; }
       .index { margin-top: 5px; font-size: 13px; }
       .value { font-size: 22px; }
+      .prefix-array { gap: 4px; }
+      .prefix-array .value { font-size: 20px; }
+      .prefix-help { font-size: 13px; }
       .controls { gap: 10px; }
       label { font-size: 14px; }
       select { height: 44px; font-size: 17px; }
@@ -49,7 +61,11 @@
       <h2>交互演示：区间求和</h2>
       <span class="tag">n = 5</span>
     </div>
-    <div id="array" class="array"></div>
+    <h3 class="array-title">原数组 a</h3>
+    <div id="array" class="array" aria-label="原数组，绿色表示查询区间"></div>
+    <h3 class="array-title">前缀和数组 s</h3>
+    <div id="prefix-array" class="array prefix-array" aria-label="前缀和数组，绿色取到右端点，橙色减去左端点之前的和"></div>
+    <p class="prefix-help">原数组从 a<sub>0</sub> 开始。s<sub>0</sub> = 0，s<sub>i</sub> = s<sub>i−1</sub> + a<sub>i−1</sub>，表示前 i 项之和。<br><span class="include-key">绿色：取 s<sub>r+1</sub></span>，<span class="subtract-key">橙色：减去 s<sub>l</sub></span>，剩下的就是区间 [l, r] 的和。</p>
     <div class="controls">
       <label for="left">左端点 l
         <select id="left"></select>
@@ -71,36 +87,48 @@
   <script>
     // 修改这个数组，就能演示其他数据。
     const a = [1, 3, 2, 5, 4];
-    const s = [0]; // 1-based 前缀和：s[i] = a[0] + ... + a[i-1]
+    const s = [0]; // s[i] 是原数组前 i 项之和：a[0] + ... + a[i-1]
     for (const x of a) s.push(s.at(-1) + x);
 
     const array = document.getElementById('array');
+    const prefixArray = document.getElementById('prefix-array');
     const left = document.getElementById('left');
     const right = document.getElementById('right');
     const formula = document.getElementById('formula');
     const answer = document.getElementById('answer');
     const direct = document.getElementById('direct');
     document.querySelector('.tag').textContent = `n = ${a.length}`;
+    array.style.gridTemplateColumns = `repeat(${a.length}, minmax(0, 1fr))`;
+    prefixArray.style.setProperty('--prefix-count', s.length);
 
-    for (let i = 1; i <= a.length; ++i) {
+    for (let i = 0; i < a.length; ++i) {
       left.add(new Option(i, i));
       right.add(new Option(i, i));
     }
-    left.value = 2;
-    right.value = 4;
+    left.value = Math.min(1, a.length - 1);
+    right.value = Math.min(3, a.length - 1);
 
     function render() {
       const l = Number(left.value), r = Number(right.value);
       array.replaceChildren();
       for (let i = 0; i < a.length; ++i) {
         const cell = document.createElement('div');
-        cell.className = 'cell' + (i + 1 >= l && i + 1 <= r ? ' active' : '');
-        cell.innerHTML = `<strong class="value">${a[i]}</strong><span class="index">${i + 1}</span>`;
+        cell.className = 'cell' + (i >= l && i <= r ? ' active' : '');
+        cell.innerHTML = `<strong class="value">${a[i]}</strong><span class="index">a<sub>${i}</sub></span>`;
         array.appendChild(cell);
       }
-      formula.innerHTML = `s<sub>${r}</sub> − s<sub>${l - 1}</sub> = ${s[r]} − ${s[l - 1]}`;
-      answer.textContent = s[r] - s[l - 1];
-      direct.textContent = `直接相加：${a.slice(l - 1, r).join(' + ')} = ${s[r] - s[l - 1]}`;
+      prefixArray.replaceChildren();
+      for (let i = 0; i < s.length; ++i) {
+        const cell = document.createElement('div');
+        const marker = i === r + 1 ? '取用' : i === l ? '减去' : '';
+        cell.className = 'cell' + (i === r + 1 ? ' active' : i === l ? ' subtract' : '');
+        cell.setAttribute('aria-label', `s${i} = ${s[i]}${marker ? '，' + marker : ''}`);
+        cell.innerHTML = `<strong class="value">${s[i]}</strong><span class="index">s<sub>${i}</sub></span><span class="marker">${marker}</span>`;
+        prefixArray.appendChild(cell);
+      }
+      formula.innerHTML = `s<sub>${r + 1}</sub> − s<sub>${l}</sub> = ${s[r + 1]} − ${s[l]}`;
+      answer.textContent = s[r + 1] - s[l];
+      direct.textContent = `直接相加：${a.slice(l, r + 1).join(' + ')} = ${s[r + 1] - s[l]}`;
     }
 
     left.addEventListener('change', () => {
