@@ -38,8 +38,9 @@ hexo.extend.filter.register('markdown-it:renderer', function(parser) {
         path.posix.join(path.posix.dirname(postPath), decodedPath)
       ].map(id => PostAsset.findById(id)).find(Boolean);
 
-      // The renderer's image rule adds the site's root and escapes the URL.
-      if (asset) token.attrSet('src', '/' + asset.path + suffix);
+      // Custom permalinks can give asset.path a leading slash. Keep exactly one
+      // so the renderer adds the site root instead of treating // as a hostname.
+      if (asset) token.attrSet('src', '/' + asset.path.replace(/^\/+/, '') + suffix);
     }
 
     return renderImage.call(this, tokens, index, options, env, renderer);
