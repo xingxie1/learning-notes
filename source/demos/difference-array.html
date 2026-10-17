@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>差分数组：区间加法交互演示</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #fff; color: #1f2937; font-family: system-ui, -apple-system, "Microsoft YaHei", sans-serif; }
+    .demo { padding: 22px 18px 25px; border: 1px solid #dbe3ec; border-radius: 18px; }
+    .header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    h2 { margin: 0; font-size: 22px; line-height: 1.3; }
+    .tag { padding: 4px 10px; border-radius: 999px; background: #eef4f9; color: #45627e; white-space: nowrap; }
+    .help { margin: 12px 0 18px; color: #64748b; font-size: 14px; line-height: 1.7; }
+    .controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    label { min-width: 0; font-size: 16px; }
+    input { display: block; width: 100%; height: 46px; margin-top: 6px; padding: 0 12px; color: #1f2937; border: 1px solid #cbd5e1; border-radius: 12px; background: #fff; font: inherit; font-size: 20px; }
+    input:focus, button:focus-visible { outline: 2px solid #64b78a; outline-offset: 2px; }
+    input[aria-invalid="true"] { border-color: #dc5454; }
+    .error { min-height: 24px; margin: 8px 0 0; color: #b42318; font-size: 14px; line-height: 1.6; }
+    .toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin: 4px 0 18px; }
+    .operation { margin: 0; font-weight: 600; }
+    button { padding: 7px 12px; border: 1px solid #cbd5e1; border-radius: 999px; background: #f8fafc; color: #45627e; cursor: pointer; font: inherit; font-size: 14px; }
+    .group { padding: 14px 12px; border: 1px solid #dbe3ec; border-radius: 14px; }
+    .group + .group { margin-top: 18px; }
+    .group h3 { margin: 0 0 12px; font-size: 17px; }
+    .array-title { margin: 14px 0 8px; font-size: 14px; font-weight: 600; }
+    .array { display: grid; grid-template-columns: repeat(var(--count, 5), minmax(0, 1fr)); gap: 8px; }
+    .cell { min-width: 0; padding: 10px 3px; border: 1px solid #dbe3ec; border-radius: 10px; text-align: center; background: #f8fafc; }
+    .value { display: block; overflow-wrap: anywhere; font-size: 24px; line-height: 1.3; }
+    .index { display: block; margin-top: 6px; color: #64748b; font-family: Georgia, serif; font-size: 16px; }
+    .marker { display: block; margin-top: 5px; min-height: 18px; font-size: 12px; }
+    .active { background: #e8f7ef; border-color: #8bd3aa; color: #167044; }
+    .subtract { background: #fff4e5; border-color: #e7b563; color: #935600; }
+    .boundary { border-style: dashed; }
+    .explanation { margin-top: 18px; padding: 14px 12px; background: #f8fafc; border-radius: 12px; font-size: 15px; line-height: 1.8; }
+    .explanation p { margin: 0; }
+    .explanation p + p { margin-top: 7px; }
+    .formula { font-family: Georgia, "Microsoft YaHei", serif; overflow-wrap: anywhere; }
+    .include-key { color: #167044; }
+    .subtract-key { color: #935600; }
+    sub { font-size: 65%; }
+    @media (max-width: 520px) {
+      .demo { padding: 15px 12px 20px; }
+      h2 { font-size: 17px; }
+      .tag, .help { font-size: 13px; }
+      .controls { gap: 8px; }
+      label { font-size: 14px; }
+      input { padding: 0 8px; font-size: 17px; }
+      .group { padding: 12px 8px; }
+      .array { gap: 4px; }
+      .value { font-size: 20px; }
+      .index { font-size: 14px; }
+      .marker { font-size: 11px; }
+      .explanation { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <section class="demo" aria-label="差分数组区间加法交互演示">
+    <div class="header">
+      <h2>交互演示：差分与区间加法</h2>
+      <span id="size" class="tag">n = 5</span>
+    </div>
+    <p id="input-help" class="help">下标从 0 开始。在区间 [l, r] 的每个元素上加 x；x 为负数表示减法。每次输入都基于原数组，修改不会累积。</p>
+    <div class="controls">
+      <label for="left">左端点 l<input id="left" type="number" min="0" max="4" step="1" value="1" required aria-describedby="input-help error"></label>
+      <label for="right">右端点 r<input id="right" type="number" min="0" max="4" step="1" value="3" required aria-describedby="input-help error"></label>
+      <label for="increment">增加值 x<input id="increment" type="number" step="1" value="3" required aria-describedby="input-help error"></label>
+    </div>
+    <p id="error" class="error" role="alert"></p>
+    <div class="toolbar">
+      <p id="operation" class="operation"></p>
+      <button id="reset" type="button">恢复示例</button>
+    </div>
+    <section class="group" aria-label="修改前的数组">
+      <h3>修改前</h3>
+      <div class="array-title">原数组 a</div>
+      <div id="original-a" class="array" aria-label="原数组 a"></div>
+      <div class="array-title">原差分数组 d</div>
+      <div id="original-d" class="array" aria-label="原差分数组 d，含末尾边界位"></div>
+    </section>
+    <section id="result" class="group" aria-label="修改后的数组" aria-live="polite">
+      <h3>修改后</h3>
+      <div class="array-title">新数组 a′</div>
+      <div id="new-a" class="array" aria-label="新数组 a"></div>
+      <div class="array-title">新差分数组 d′</div>
+      <div id="new-d" class="array" aria-label="新差分数组 d，含末尾边界位"></div>
+    </section>
+    <div class="explanation">
+      <p class="formula">d<sub>0</sub> = a<sub>0</sub>，d<sub>i</sub> = a<sub>i</sub> − a<sub>i−1</sub>（1 ≤ i &lt; n）。</p>
+      <p><span class="include-key">绿色：d[l] 加 x</span>；<span class="subtract-key">橙色：d[r+1] 减 x</span>。只修改两个差分位置，就能表示整个区间的变化。</p>
+      <p id="updates" class="formula"></p>
+      <p class="formula">对新 d 求前缀和，还原新 a：a′<sub>i</sub> = d′<sub>0</sub> + ⋯ + d′<sub>i</sub>。</p>
+      <p id="boundary-note" class="help">d 额外保留一个初始为 0 的边界位 d<sub>n</sub>，用于记录区间末尾的抵消；还原 a 时只取前 n 项。</p>
+    </div>
+  </section>
+  <script>
+    // 与文章示例一致；a 使用 0 下标，d 的末尾额外留一个边界位。
+    const originalA = [1, 3, 3, 5, 8];
+    const n = originalA.length;
+    const originalD = originalA.map((value, i) => value - (i === 0 ? 0 : originalA[i - 1]));
+    originalD.push(0);
+
+    const left = document.getElementById('left');
+    const right = document.getElementById('right');
+    const increment = document.getElementById('increment');
+    const error = document.getElementById('error');
+    const result = document.getElementById('result');
+    const operation = document.getElementById('operation');
+    const updates = document.getElementById('updates');
+    document.getElementById('size').textContent = `n = ${n}`;
+    left.max = right.max = n - 1;
+
+    const signed = value => value >= 0 ? `+${value}` : `−${Math.abs(value)}`;
+    const operand = value => value < 0 ? `(${value})` : String(value);
+
+    function drawArray(id, values, name, l, r, x, isDifference, isNew) {
+      const array = document.getElementById(id);
+      array.style.setProperty('--count', values.length);
+      array.replaceChildren();
+      values.forEach((value, i) => {
+        const cell = document.createElement('div');
+        const included = isDifference ? i === l : i >= l && i <= r;
+        const cancelled = isDifference && i === r + 1;
+        const boundary = isDifference && i === n;
+        cell.className = 'cell' + (included ? ' active' : cancelled ? ' subtract' : '') + (boundary ? ' boundary' : '');
+        const marker = isNew && included ? signed(x) : isNew && cancelled ? signed(-x) : '';
+        cell.setAttribute('aria-label', `${name}${i} = ${value}${boundary ? '，边界位' : ''}${marker ? '，变化 ' + marker : ''}`);
+        cell.innerHTML = `<strong class="value">${value}</strong><span class="index">${name}<sub>${i}</sub></span><span class="marker">${marker || (boundary ? '边界位' : '')}</span>`;
+        array.appendChild(cell);
+      });
+    }
+
+    function showError(message, invalidInputs) {
+      error.textContent = message;
+      invalidInputs.forEach(input => input.setAttribute('aria-invalid', 'true'));
+      operation.textContent = '请输入合法的 l、r、x';
+      result.hidden = true;
+      updates.textContent = '';
+      drawArray('original-a', originalA, 'a', -2, -2, 0, false, false);
+      drawArray('original-d', originalD, 'd', -2, -2, 0, true, false);
+    }
+
+    function render() {
+      [left, right, increment].forEach(input => input.removeAttribute('aria-invalid'));
+      const inputs = [left, right, increment];
+      const invalid = inputs.filter(input => input.value.trim() === '' || !Number.isSafeInteger(Number(input.value)));
+      if (invalid.length) return showError('请完整输入 l、r、x，且都必须是安全范围内的整数。', invalid);
+      const l = Number(left.value), r = Number(right.value), x = Number(increment.value);
+      if (l < 0 || r >= n || l > r) return showError(`区间需满足 0 ≤ l ≤ r ≤ ${n - 1}。`, [left, right]);
+
+      const newD = [...originalD];
+      newD[l] += x;
+      newD[r + 1] -= x;
+      let sum = 0;
+      const newA = newD.slice(0, n).map(value => sum += value);
+      if (![...newD, ...newA].every(Number.isSafeInteger)) return showError('x 过大，请输入较小的整数以保证结果精确。', [increment]);
+
+      error.textContent = '';
+      result.hidden = false;
+      operation.textContent = `区间 [${l}, ${r}] 每个元素 ${signed(x)}`;
+      drawArray('original-a', originalA, 'a', l, r, x, false, false);
+      drawArray('original-d', originalD, 'd', l, r, x, true, false);
+      drawArray('new-a', newA, 'a′', l, r, x, false, true);
+      drawArray('new-d', newD, 'd′', l, r, x, true, true);
+      updates.innerHTML = `d′<sub>${l}</sub> = ${originalD[l]} + ${operand(x)} = ${newD[l]}<br>d′<sub>${r + 1}</sub> = ${originalD[r + 1]} − ${operand(x)} = ${newD[r + 1]}`;
+    }
+
+    [left, right, increment].forEach(input => input.addEventListener('input', render));
+    document.getElementById('reset').addEventListener('click', () => {
+      left.value = Math.min(1, n - 1);
+      right.value = Math.min(3, n - 1);
+      increment.value = 3;
+      render();
+    });
+    document.getElementById('reset').click();
+  </script>
+</body>
+</html>
