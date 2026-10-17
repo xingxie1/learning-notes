@@ -6,6 +6,8 @@ categories:
   - 学习笔记
 tags:
   - 学习
+# 自定义文章链接，例如 posts/algorithm-time-complexity/；每篇使用不同的英文短名，留空则使用默认链接。
+permalink:
 description:
 cover: /img/card-cover.svg
 katex: true
