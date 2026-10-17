@@ -5,9 +5,8 @@ categories:
   - 随笔
 tags:
   - 其他
-description: "退役作文"
+description: 
 katex: true
-cover: /img/世事一场大梦，人生几度凄凉_cover.jpg
 
 ---
 
