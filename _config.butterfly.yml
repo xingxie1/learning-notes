@@ -121,4 +121,4 @@ math:
 
 inject:
   head:
-    - <link rel="stylesheet" href="/learning-notes/css/github-alerts.css">
+    - <link rel="stylesheet" href="/css/github-alerts.css">
